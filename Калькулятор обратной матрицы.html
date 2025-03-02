@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор матриц 4x4</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: right; }
+        th { background-color: #f2f2f2; }
+        .result { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Калькулятор матриц 4x4</h1>
+    <form id="matrixForm">
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="4">Введите элементы матрицы 4x4:</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" id="cell-0-0" placeholder="[1][1]"></td>
+                    <td><input type="text" id="cell-0-1" placeholder="[1][2]"></td>
+                    <td><input type="text" id="cell-0-2" placeholder="[1][3]"></td>
+                    <td><input type="text" id="cell-0-3" placeholder="[1][4]"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" id="cell-1-0" placeholder="[2][1]"></td>
+                    <td><input type="text" id="cell-1-1" placeholder="[2][2]"></td>
+                    <td><input type="text" id="cell-1-2" placeholder="[2][3]"></td>
+                    <td><input type="text" id="cell-1-3" placeholder="[2][4]"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" id="cell-2-0" placeholder="[3][1]"></td>
+                    <td><input type="text" id="cell-2-1" placeholder="[3][2]"></td>
+                    <td><input type="text" id="cell-2-2" placeholder="[3][3]"></td>
+                    <td><input type="text" id="cell-2-3" placeholder="[3][4]"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" id="cell-3-0" placeholder="[4][1]"></td>
+                    <td><input type="text" id="cell-3-1" placeholder="[4][2]"></td>
+                    <td><input type="text" id="cell-3-2" placeholder="[4][3]"></td>
+                    <td><input type="text" id="cell-3-3" placeholder="[4][4]"></td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="button" onclick="calculateInverse()">Вычислить обратную матрицу</button>
+    </form>
+    <div class="result" id="result"></div>
+
+    <script>
+        function calculateInverse() {
+            const matrix = [];
+            for (let i = 0; i < 4; i++) {
+                const row = [];
+                for (let j = 0; j < 4; j++) {
+                    const value = parseFloat(document.getElementById(`cell-${i}-${j}`).value);
+                    if (isNaN(value)) {
+                        alert("Заполните все ячейки матрицы");
+                        return;
+                    }
+                    row.push(value);
+                }
+                matrix.push(row);
+            }
+
+            const det = math.det(matrix);
+            if (Math.abs(det) < 1e-10) {
+                document.getElementById('result').innerText = "Матрица вырождена, обратной матрицы не существует";
+                return;
+            }
+
+            const invMatrix = math.inv(matrix);
+            displayResult(matrix, invMatrix, det);
+        }
+
+        function displayResult(matrix, invMatrix, det) {
+            let result = `<h2>Результат:</h2>`;
+            result += `<h3>Исходная матрица:</h3><pre>${formatMatrix(matrix)}</pre>`;
+            result += `<h3>Обратная матрица:</h3><pre>${formatMatrix(invMatrix)}</pre>`;
+            result += `<p>Определитель: ${det.toFixed(4)}</p>`;
+            document.getElementById('result').innerHTML = result;
+        }
+
+        function formatMatrix(matrix) {
+            return matrix.map(row => row.map(num => num.toFixed(3).padStart(8)).join('  ')).join('\n');
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.min.js"></script>
+</body>
+</html>
